@@ -12,5 +12,78 @@ info:
   termsOfService: https://razeen.me
   title: Swagger Example API
   version: "1.0"
-paths: {}
+paths:
+  /cms/api/group:
+    get:
+      description: 展示附加成员信息的群组信息列表
+      parameters:
+      - description: 运营商
+        in: query
+        name: operator_id
+        type: integer
+      - description: 组ID
+        in: query
+        name: group_id
+        type: string
+      - description: 组编号
+        in: query
+        name: group_no
+        type: string
+      - description: 群名称
+        in: query
+        name: group_name
+        type: string
+      - description: 成员用户ID
+        in: query
+        name: member_id
+        type: string
+      - description: 成员用户密聊ID
+        in: query
+        name: member_mlid
+        type: string
+      - description: 成员用户角色
+        in: query
+        name: member_role
+        type: integer
+      - description: 群组状态;-1 已冻结,0-已关闭, 1-开启中
+        in: query
+        name: state
+        type: integer
+      - description: 创建时间-开始范围2018-01-01 00:00:00
+        in: query
+        name: start_time
+        type: string
+      - description: 创建时间-结束范围2020-01-01 00:00:00
+        in: query
+        name: end_time
+        type: string
+      - default: 0
+        description: 偏移量
+        in: query
+        name: offset
+        type: integer
+      - default: 20
+        description: 限制数
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 附加成员信息的群组信息
+          schema:
+            $ref: '#/definitions/string'
+        "500":
+          description: 内部错误
+          schema:
+            $ref: '#/definitions/string'
+      security:
+      - ApiKeyAuth: []
+      - OAuth2Implicit:
+        - admin
+        - write
+      summary: 展示群信息列表
+      tags:
+      - group-info 群聊信息
 swagger: "2.0"

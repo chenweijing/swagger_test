@@ -17,5 +17,119 @@
     },
     "host": "127.0.0.1:9090",
     "basePath": "/api/v1",
-    "paths": {}
+    "paths": {
+        "/cms/api/group": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "OAuth2Implicit": [
+                            "admin",
+                            "write"
+                        ]
+                    }
+                ],
+                "description": "展示附加成员信息的群组信息列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "group-info 群聊信息"
+                ],
+                "summary": "展示群信息列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "运营商",
+                        "name": "operator_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "组ID",
+                        "name": "group_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "组编号",
+                        "name": "group_no",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "群名称",
+                        "name": "group_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "成员用户ID",
+                        "name": "member_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "成员用户密聊ID",
+                        "name": "member_mlid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "成员用户角色",
+                        "name": "member_role",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "群组状态;-1 已冻结,0-已关闭, 1-开启中",
+                        "name": "state",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间-开始范围2018-01-01 00:00:00",
+                        "name": "start_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间-结束范围2020-01-01 00:00:00",
+                        "name": "end_time",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "偏移量",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "限制数",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "附加成员信息的群组信息",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    },
+                    "500": {
+                        "description": "内部错误",
+                        "schema": {
+                            "$ref": "#/definitions/string"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

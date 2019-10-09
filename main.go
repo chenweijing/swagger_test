@@ -9,19 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
-
-// https://razeencheng.com/post/go-swagger.html
-// @Param 1.参数名 2.参数类型 3.参数数据类型 4.是否必须 5.参数描述 6.其他属性
-// @Param id path integer true "文件ID"
-
-// 参数类型
-// path 	该类型参数直接拼接在URL中，如Demo中HandleGetFile：
-// query 	该类型参数一般是组合在URL中的，如Demo中HandleHello
-// formData 该类型参数一般是POST,PUT方法所用，如Demo中HandleLogin
-// body 	当Accept是JSON格式时，我们使用该字段指定接收的JSON类型
 
 // @Summary 测试SayHello
 // @Description 向你说Hello
@@ -79,14 +68,20 @@ func main() {
 
 	//r.Run(":9090")
 
+	fmt.Println("swagger server start.")
+
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/hello/{name}", index).Methods("GET")
-	router.HandleFunc("/swagger.json", swagger).Methods("GET")
-	router.HandleFunc("/docs", handleDocs).Methods("GET")
+	router.HandleFunc("/swagger.yaml", swagger).Methods("GET")
+	router.HandleFunc("/api/v1/mytest", handleMytest).Methods("GET")
 
-	handler := cors.Default().Handler(router)
+	// router.HandleFunc("/api/docs", handleDocs).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":9090", handler))
+	router.PathPrefix("/docs").HandlerFunc(handleDocs).Methods(http.MethodGet)
+
+	// handler := cors.Default().Handler(router)
+
+	log.Fatal(http.ListenAndServe(":9091", router))
 }
 
 func swagger(w http.ResponseWriter, r *http.Request) {
@@ -113,4 +108,31 @@ func handleDocs(w http.ResponseWriter, r *http.Request) {
 	} else {
 		httpSwagger.WrapHandler.ServeHTTP(w, r)
 	}
+}
+
+// GroupListWithMember 展示附加成员信息的群组信息列表
+// @Tags group-info 群聊信息
+// @Summary 展示群信息列表
+// @Description 展示附加成员信息的群组信息列表
+// @Produce  json
+// @Param operator_id query int false "运营商"
+// @Param group_id query string false "组ID"
+// @Param group_no query string false "组编号"
+// @Param group_name query string false "群名称"
+// @Param member_id query string false "成员用户ID"
+// @Param member_mlid query string false "成员用户密聊ID"
+// @Param member_role query int false "成员用户角色"
+// @Param state query int false "群组状态;-1 已冻结,0-已关闭, 1-开启中"
+// @Param start_time query string false "创建时间-开始范围2018-01-01 00:00:00"
+// @Param end_time query string false "创建时间-结束范围2020-01-01 00:00:00"
+// @Param offset query int false "偏移量" default(0)
+// @Param limit query int false "限制数" default(20)
+// @Success 200 {object} string "附加成员信息的群组信息"
+// @Failure 500 {object} string "内部错误"
+// @Security ApiKeyAuth
+// @Security OAuth2Implicit[admin, write]
+// @Router /cms/api/group [get]
+func handleMytest(w http.ResponseWriter, r *http.Request) {
+	log.Println("Responsing to /api/v1/mytest request")
+	fmt.Fprintln(w, "Hello:测试完毕")
 }
